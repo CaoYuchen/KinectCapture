@@ -1,24 +1,25 @@
 #include <iostream>
 #include <string>
 #include <opencv2/opencv.hpp>
+#include <windows.h>
+#include <vector>
 
 std::string type2str(int type);
 
 int main()
 {
-	const int fileNumber = 1;
+	std::vector<cv::String> files;
+	cv::String dir_name = "..\\..\\Dataset\\depth\\*.bmp";
+	cv::glob(dir_name, files);
 
-	for (int i = 0; i < fileNumber; i++)
+
+	for (int i = 0; i < files.size(); i++)
 	{
-		std::stringstream stream;
-		std::string filename;
-		stream << "..\\..\\Dataset\\depth\\" << i << ".bmp";
-		stream >> filename;
-
 		//std::cout << filename << std::endl;
-		cv::Mat bmp8 = cv::imread(filename);
+		cv::Mat bmp8 = cv::imread(files[i].c_str());
 		//cv::imshow("bmp8",bmp8);
 		//cv::waitKey(6000);
+		//std::cout << files[i].c_str() << std::endl;
 
 		cv::Mat mv[4];
 		cv::Mat temp;
@@ -32,12 +33,20 @@ int main()
 		//while(1)
 		//cv::imshow("bmp16", bmp16);
 		//cv::waitKey(6000);
-
-		stream.clear();
+	
+		
+		std::stringstream stream;
 		std::string outfile;
-		stream << "..\\..\\Dataset\\depth16\\" << i << ".png";
+		stream << files[i].c_str() << ".png";
 		stream >> outfile;
-		cv::imwrite(outfile, bmp16);
+
+		std::cout << i << std::endl;
+
+		std::vector<int> compression_params;
+		compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+		compression_params.push_back(9);
+		cv::imwrite(outfile, bmp16, compression_params);
+		
 	}
 	return 0;
 }
