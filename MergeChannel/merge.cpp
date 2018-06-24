@@ -37,8 +37,11 @@ int main()
 		
 		std::stringstream stream;
 		std::string outfile;
-		stream << files[i].c_str() << ".png";
+		
+		stream << files[i].c_str();
 		stream >> outfile;
+		outfile = outfile.substr(0, outfile.length() - 4) + ".png";
+		//std::cout << outfile << std::endl;
 
 		std::cout << i << std::endl;
 
